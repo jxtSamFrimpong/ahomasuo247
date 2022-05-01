@@ -13,7 +13,7 @@ class _OrderRoomState extends State<OrderRoom> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
+      color: Colors.red
     );
   }
 }
