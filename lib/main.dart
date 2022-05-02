@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'views/providerpractise/providertrial.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,21 +14,58 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.blue,
+        ),
+        home: Scaffold(
+          drawer: Drawer(
+              child: Column(
+                children: [
+                  DrawerHeader(
+                    child: Text('Drawer Header'),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  ListTile(
+                    title: Text('Item 1'),
+                    onTap: () {
+                      // Update the state of the app.
+                      // ...
+                    },
+                  ),
+
+                  ListTile(
+                    title: Text('Item 2'),
+                    onTap: () {
+                      // Update the state of the app.
+                      // ...
+                    },
+                  ),
+                ],
+              )
+          ),
+          //body: MyHomePage(title: 'Flutter Demo Home Page'),
+          body: ProviderTrial(),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Counter(),
+        )
+      ]
     );
   }
 }
@@ -48,96 +87,90 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
-        SlidingUpPanel(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24.0),
-            topRight: Radius.circular(24.0),
-          ),
-          //border: const Border(),
-          body: Scaffold(
-            // appBar: AppBar(
-            //   // Here we take the value from the MyHomePage object that was created by
-            //   // the App.build method, and use it to set our appbar title.
-            //   title: Text(widget.title),
-            // ),
-
+        children: [
+          SlidingUpPanel(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.0),
+              topRight: Radius.circular(24.0),
+            ),
+            //border: const Border(),
             body: PageView(
 
-              pageSnapping: true,
+                pageSnapping: true,
 
+                children: <Widget>[
+                  Container(
+                    child: Center(child: Text('accepted bids')),
+                    color: Colors.greenAccent,
+                  ),
+                  Container(
+                    child: Center(child: Text('current order delivering/to add')),
+                    color: Colors.pinkAccent,
+                  ),
+                  Container(
+                    child: Center(child: Text('orders near me*')),
+                    color: Colors.orangeAccent,
+                  ),
+                ],
+              ),
+
+
+            panel: Center(
+              child: Text('ok'),
+            ),
+
+            //collapsed: Text('collapsed'),
+
+            header: Wrap(
+              alignment: WrapAlignment.spaceAround, // set your alignment
               children: <Widget>[
-                Container(
-                  color: Colors.pink,
-                ),
-                Container(
-                  color: Colors.cyan,
-                ),
-                Container(
-                  color: Colors.deepPurple,
-                ),
+                Text("1"),
+                Text("2"),
               ],
             ),
+
+            //minHeight: 50.0,
+
+            //margin: const EdgeInsets.all(24.0),
+
+            backdropTapClosesPanel: true,
+            backdropOpacity: 0.0,
+
+            onPanelOpened: (){
+              print('fully opened');
+            },
+
+            onPanelClosed: (){
+              print('fully closed');
+            },
+
+            isDraggable: true,
+
+            defaultPanelState: PanelState.CLOSED,
+
           ),
 
-          panel: Center(
-            child: Text('ok'),
-          ),
+      Positioned(
+      right: 40,
+      top: 40,
+      child: FloatingActionButton(
+        child: Icon(Icons.alarm),
+      onPressed: () {},
+      )
+      ),
 
-          //collapsed: Text('collapsed'),
-
-          header: Container(
-              child: Center(child: Text('header')
-              ),
-              // decoration: BoxDecoration(
-              //     color: Colors.greenAccent,
-              //     borderRadius: BorderRadius.only(
-              //       topLeft: Radius.circular(24.0),
-              //       topRight: Radius.circular(24.0),
-              //     )
-              // )
+          Positioned(
+              left: 40,
+              top: 40,
+              child: FloatingActionButton(
+                child: Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              )
           )
-          ,
+        ],
+      );
 
-          //minHeight: 50.0,
-
-          //margin: const EdgeInsets.all(24.0),
-
-          backdropTapClosesPanel: true,
-          backdropOpacity: 0.0,
-
-          onPanelOpened: (){
-            print('fully opened');
-          },
-
-          onPanelClosed: (){
-            print('fully closed');
-          },
-
-          isDraggable: true,
-
-          defaultPanelState: PanelState.CLOSED,
-
-        ),
-
-    Positioned(
-    right: 40,
-    top: 40,
-    child: FloatingActionButton(
-      child: Icon(Icons.alarm),
-    onPressed: () {},
-    )
-    ),
-
-        Positioned(
-            left: 40,
-            top: 40,
-            child: FloatingActionButton(
-              child: Icon(Icons.menu),
-              onPressed: () {},
-            )
-        )
-      ],
-    );
   }
 }
