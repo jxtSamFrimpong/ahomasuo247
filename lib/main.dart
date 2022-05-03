@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'views/providerpractise/providertrial.dart';
+import 'views/practise/providertrial.dart';
 
 void main() {
   runApp(const MyApp());
