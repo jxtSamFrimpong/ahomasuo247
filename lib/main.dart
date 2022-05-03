@@ -58,13 +58,15 @@ class MyApp extends StatelessWidget {
               )
           ),
           //body: MyHomePage(title: 'Flutter Demo Home Page'),
-          body: ProviderTrial(),
+          body: MyHomePage(title: ''),
         ),
       ),
       providers: [
         ChangeNotifierProvider.value(
           value: Counter(),
-        )
+        ),
+
+        ChangeNotifierProvider.value(value: HeaderController()),
       ]
     );
   }
@@ -83,6 +85,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  PanelController _panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -94,40 +97,93 @@ class _MyHomePageState extends State<MyHomePage> {
               topRight: Radius.circular(24.0),
             ),
             //border: const Border(),
-            body: PageView(
+            body: GestureDetector(
+              onTap: (){
+                if(_panelController.isPanelOpen){
+                  _panelController.close();
+                }
+              },
+              child: PageView(
 
-                pageSnapping: true,
+                  pageSnapping: true,
 
-                children: <Widget>[
-                  Container(
-                    child: Center(child: Text('accepted bids')),
-                    color: Colors.greenAccent,
-                  ),
-                  Container(
-                    child: Center(child: Text('current order delivering/to add')),
-                    color: Colors.pinkAccent,
-                  ),
-                  Container(
-                    child: Center(child: Text('orders near me*')),
-                    color: Colors.orangeAccent,
-                  ),
-                ],
-              ),
+                  children: <Widget>[
+                    Container(
+                      child: Center(child: Text('accepted bids')),
+                      color: Colors.greenAccent,
+                    ),
+                    Container(
+                      child: Center(child: Text('current order delivering/to add')),
+                      color: Colors.pinkAccent,
+                    ),
+                    Container(
+                      child: Center(child: Text('orders near me*')),
+                      color: Colors.orangeAccent,
+                    ),
+                  ],
+                ),
+            ),
 
 
             panel: Center(
-              child: Text('ok'),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MaterialButton(
+                          child: Icon(Icons.star),
+                          onPressed: ()async{
+                            if(_panelController.isPanelClosed){
+                              await _panelController.open();
+                            }else{
+                              print('already opened');
+                            }
+                          }),
+
+                      MaterialButton(
+                          child: Icon(Icons.message),
+                          onPressed: ()async{
+                            if(_panelController.isPanelClosed){
+                              await _panelController.open();
+                            }else{
+                              print('already opened');
+                            }
+                          }),
+
+                      MaterialButton(
+                          child: Icon(Icons.add_a_photo_outlined),
+                          onPressed: ()async{
+                            if(_panelController.isPanelClosed){
+                              await _panelController.open();
+                            }else{
+                              print('already opened');
+                            }
+                          })
+                    ],
+                  ),
+                ],
+              )
             ),
 
             //collapsed: Text('collapsed'),
 
-            header: Wrap(
-              alignment: WrapAlignment.spaceAround, // set your alignment
-              children: <Widget>[
-                Text("1"),
-                Text("2"),
-              ],
-            ),
+            // header: Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     MaterialButton(
+            //         child: Icon(Icons.star),
+            //         onPressed: ()async{
+            //           if(_panelController.isPanelClosed){
+            //             await _panelController.open();
+            //           }else{
+            //             print('already opened');
+            //           }
+            //     })
+            //   ],
+            // ),
+
+            controller: _panelController,
 
             //minHeight: 50.0,
 
@@ -173,4 +229,27 @@ class _MyHomePageState extends State<MyHomePage> {
       );
 
   }
+}
+
+class HeaderController extends ChangeNotifier{
+  String _acc = 'accepted';
+  String _bid = 'bid';
+  String _jour = 'journey';
+
+  late String _prevCall;
+  late String _currCall;
+
+
+  void set _setPrevCall(String val){
+    this._prevCall = val.toString();
+    notifyListeners();
+  }
+
+  void set _setCurrCall(String val){
+    this._currCall = val.toString();
+    notifyListeners();
+  }
+
+
+
 }
